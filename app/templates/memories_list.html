@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Anılar - 7B Anı Defteri{% endblock %}
+
+{% block content %}
+<div class="relative flex min-h-screen w-full flex-col justify-between overflow-x-hidden">
+    <div class="flex-grow">
+        <header class="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white/80 p-4 backdrop-blur-sm">
+            <h1 class="text-xl font-bold text-[var(--text-primary)]">7B Anı Defteri</h1>
+            <a href="/memories/new" class="flex size-10 items-center justify-center rounded-full bg-[var(--primary-color)] text-white hover:bg-blue-600">
+                <span class="material-symbols-outlined">add</span>
+            </a>
+        </header>
+        
+        <main class="p-4">
+            <div class="space-y-4">
+                {% for memory in memories %}
+                <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <div class="mb-3 flex items-center gap-3">
+                        <div class="h-12 w-12 flex-shrink-0 rounded-full bg-cover bg-center" style='background-image: url("{{ memory.author.avatar_url }}");'></div>
+                        <div>
+                            <p class="font-bold text-[var(--text-primary)]">{{ memory.author.name }}</p>
+                            <p class="text-sm text-[var(--text-secondary)]">7B Sınıfı · {{ memory.created_at_human }}</p>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-3 text-base text-[var(--text-primary)]">{{ memory.text }}</p>
+                    
+                    {% if memory.image_url %}
+                    <div class="mb-3 aspect-video w-full overflow-hidden rounded-lg">
+                        <div class="h-full w-full bg-cover bg-center" style='background-image: url("{{ memory.image_url }}");'></div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="flex items-center justify-between rounded-full bg-[var(--secondary-color)] p-2">
+                        <form method="post" action="/memories/{{ memory.id }}/like" class="inline">
+                            <button type="submit" class="flex items-center gap-2 rounded-full px-3 py-1 text-[var(--text-secondary)] hover:bg-gray-200">
+                                <span class="material-symbols-outlined text-red-500">favorite</span>
+                                <span class="text-sm font-medium">{{ memory.like_count }}</span>
+                            </button>
+                        </form>
+                        
+                        <a href="/memories/{{ memory.id }}" class="flex items-center gap-2 rounded-full px-3 py-1 text-[var(--text-secondary)] hover:bg-gray-200">
+                            <span class="material-symbols-outlined">chat_bubble_outline</span>
+                            <span class="text-sm font-medium">{{ memory.comment_count }}</span>
+                        </a>
+                        
+                        <button class="flex items-center gap-2 rounded-full px-3 py-1 text-[var(--text-secondary)] hover:bg-gray-200">
+                            <span class="material-symbols-outlined">send</span>
+                            <span class="text-sm font-medium">Paylaş</span>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
